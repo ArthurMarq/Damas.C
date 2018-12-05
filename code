@@ -1,0 +1,237 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+    
+char tabuleiro[11][11] = {
+                    {' ',' ', '1', '2', '3', '4', '5', '6', '7', '8'},
+                    {'1',' ', ' ', 'P', ' ', 'P', ' ', 'P', ' ', 'P'},
+                    {'2',' ', 'P', ' ', 'P', ' ', 'P', ' ', 'P', ' '},
+                    {'3',' ', ' ', 'P', ' ', 'P', ' ', 'P', ' ', 'P'},
+                    {'4',' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                    {'5',' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                    {'6',' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B', ' '},
+                    {'7',' ', ' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'},
+                    {'8',' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B', ' '},
+                    };
+
+
+int x, y,a,b;
+int linhaOrigem, colunaOrigem, linhaDestino, colunaDestino;
+int gravar = 0;
+int vencer = 0;
+char jogador, jogador2, vencedor;
+
+
+void exibirTabuleiro(){ //Função para exibir tabuleiro
+    for (x = 0; x <= 9; x++)
+    {
+        for (y = 0; y <= 9; y++)
+        {
+            printf("%c ", tabuleiro[x][y]);
+        }
+        printf("\n");
+    }
+
+}
+
+void verificarRegras()
+{
+    //Verificando movimentos das Peças pretas
+    if(jogador == 2){
+        if((tabuleiro[linhaOrigem][colunaOrigem] == 'P'))
+        {
+            if((tabuleiro[linhaDestino][colunaDestino] == ' '))
+            {
+                if((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[linhaOrigem + 1][colunaOrigem]))
+                {
+                    gravar = 1;
+                    jogador -= 1;
+                }
+                else if((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[linhaOrigem + 2][colunaOrigem + 2]) || (tabuleiro[linhaDestino][colunaDestino ] == tabuleiro[linhaOrigem + 2][colunaOrigem - 2]))
+                {
+                    if((tabuleiro[linhaOrigem + 1][colunaOrigem + 1] == 'B') || (tabuleiro[linhaOrigem + 1][colunaOrigem - 1] == 'B'))
+                    {
+                        gravar = 1;
+                        jogador -= 1;
+                    }
+                    else
+                    {
+                        gravar = 0;
+                    }
+                }
+                else if ((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[8][colunaDestino]))
+                {
+                    gravar = 1;
+                    printf("Voce venceu!");
+                    vencedor = jogador2;
+                }
+                else
+                {
+                    gravar = 0;
+                }
+            }
+            else
+            {
+                gravar = 0;
+            }
+
+        }
+        else
+        {
+            gravar = 0;
+        }
+    }
+
+
+    //Verificando movimentos das Peças BRANCAS
+    if((tabuleiro[linhaOrigem][colunaOrigem] == 'B'))
+    {
+        if((tabuleiro[linhaDestino][colunaDestino] == ' '))
+        {
+            if((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[linhaOrigem - 1][colunaOrigem]))
+            {
+                gravar = 1;
+                jogador += 1;
+            }
+            else if((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[linhaOrigem - 2][colunaOrigem + 2]) || (tabuleiro[linhaDestino][colunaDestino ] == tabuleiro[linhaOrigem - 2][colunaOrigem - 2]))
+            {
+                if((tabuleiro[linhaOrigem - 1][colunaOrigem - 1] == 'P') || (tabuleiro[linhaOrigem - 1][colunaOrigem + 1] == 'P'))
+                {
+                    gravar = 1;
+                    jogador += 1;
+                }
+                else
+                {
+                    gravar = 0;
+                }
+            }
+            else if ((tabuleiro[linhaDestino][colunaDestino] == tabuleiro[1][colunaDestino]))
+            {
+                gravar = 1;
+                vencer = 1;
+                printf("Voce venceu!");
+                vencedor = jogador;
+                
+            }
+            else
+            {
+                gravar = 0;
+            }
+        }
+        else
+        {
+            gravar = 0;
+        }
+
+    }
+    else
+    {
+        gravar = 0;
+    }
+}
+
+void realizarJogada()
+{
+
+    //Escolhendo a peça branca
+    printf("\nQual Peca deseja mover?(Branco)\nLinha: ");
+    scanf(" %d", &linhaOrigem);
+    printf("Coluna: ");
+    scanf(" %d", &colunaOrigem);
+
+
+    //Destino da peca branca
+    printf("\nPara onde deseja mover?(Branco)\nLinha: ");
+    scanf(" %d", &linhaDestino);
+    printf("Coluna: ");
+    scanf(" %d", &colunaDestino);
+    printf(&tabuleiro[a][b],&linhaDestino,&colunaDestino);
+    
+    printf("\n------------------------------");
+    
+    //Escolhendo a peça preta
+    printf("\nQual Peca deseja mover?(Preto)\nLinha: ");
+    scanf(" %d", &linhaOrigem);
+    printf("Coluna: ");
+    scanf(" %d", &colunaOrigem);
+
+
+    //Destino da peça
+    printf("\nPara onde deseja mover?(Preto)\nLinha: ");
+    scanf(" %d", &linhaDestino);
+    printf("Coluna: ");
+    scanf(" %d", &colunaDestino);
+    printf(&tabuleiro[a][b],&linhaDestino,&colunaDestino);
+    
+    printf("\n------------------------------");
+    
+    system("CLS");
+
+
+
+    verificarRegras();
+
+    if(gravar == 1)
+    {
+        //Inserindo a Peça no destino e retirando a Peça de origem
+        //Somei com 1 Pra evitar que Pegue a linha e coluna erradas.
+        //Se eu digitasse 1, ele Pegaria a segunda linha da matriz, que não Possui nada.
+        tabuleiro[linhaDestino][colunaDestino] = tabuleiro[linhaOrigem][colunaOrigem];
+        tabuleiro[linhaOrigem][colunaOrigem] = ' ';
+    }
+    else
+    {
+        realizarJogada();
+    }
+}
+
+
+int ranking(char  jogador, char  jogador2, char  vencedor);
+int main()
+{
+	printf("------------------------------------------\n"
+            "--------Bem-vindo ao jogo de damas--------\n"
+	        "------------------------------------------\n");
+	        
+	        
+    printf("\nQual o nome do primeiro jogador?(Pecas Brancas)\n");
+    scanf(" %s", &jogador);
+	printf("\nQual o nome do segundo jogador?(Pecas Pretas)\n");
+	scanf("%s", &jogador2);
+    printf("\nJogador: %s e branco, jogador: %s e preto", &jogador, &jogador2);
+	printf("\nO jogador branco sempre comeca por primeiro.\n");	
+	printf("\n---------------------------------------------\n");	
+        
+        exibirTabuleiro();
+        realizarJogada();
+	
+
+	ranking(jogador,jogador2,vencedor);
+	scanf("%s");   
+
+	return 0;
+    }
+    
+int ranking(char  jogador, char  jogador2, char vencedor)
+{
+	FILE * arquivo = NULL;	
+	arquivo = fopen("ranking.txt","a+");
+	printf("\nNome do jogador 1: %s", jogador);
+	
+    fprintf(arquivo, &jogador, 1);
+    fprintf(arquivo, "VS");
+
+    printf("\nNome do jogador 2: %s", jogador2);	
+	fprintf(arquivo, &jogador2, 1);
+    fprintf(arquivo, "\n");
+    
+    printf("O vencedor foi : %s" , vencedor);
+    fprintf(arquivo, "O vencedor foi:  ");
+    fprintf(arquivo, &vencedor, 1);
+    fprintf(arquivo, "\n");
+    
+    fclose(arquivo);
+    
+    return EXIT_SUCCESS;
+}
